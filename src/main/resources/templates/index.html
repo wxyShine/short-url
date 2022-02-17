@@ -59,16 +59,7 @@
                 ev.keyCode === 13 && this.doShort()
             },
             doShort() {
-                let regx = "^((https|http|ftp|rtsp|mms)?://)"  //https、http、ftp、rtsp、mms
-                    + "?(([0-9a-z_!~*‘().&=+$%-]+: )?[0-9a-z_!~*‘().&=+$%-]+@)?" //ftp的user@
-                    + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 例如：199.194.52.184
-                    + "|" // 允许IP和DOMAIN(域名)
-                    + "([0-9a-z_!~*‘()-]+\\.)*" // 域名- www.
-                    + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
-                    + "[a-z]{2,6})" // first level domain- .com or .museum
-                    + "(:[0-9]{1,5})?" // 端口号最大为65535,5位数
-                    + "((/?)|" // a slash isn‘t required if there is no file name
-                    + "(/[0-9a-z_!~*‘().;?:@&=+$,%#-]+)+/?)$";
+                let regx = 'http(s*)://[^\s]*'
                 let re = new RegExp(regx)
                 if (re.exec(this.longUrl) === null) {
                     this.$message.warning('请输入正确格式的长链接')
@@ -88,7 +79,7 @@
                             this.$refs.shortUrl.disabled = true
                             this.$message.success("短链接已复制到剪贴板");
                         } else {
-                            this.$message.error("短链接获取失败：" + res.data.Message);
+                            this.$message.error("短链接获取失败：" + res.data.msg);
                         }
                     })
                     .catch(() => {
@@ -123,7 +114,7 @@
                 return this.isPc ? 'body-center body-width-pc' : 'body-center'
             },
             onCopy() {
-                this.$message.success("Copied!");
+                this.$message.success("复制成功!");
             },
             changeDisableStatus(event) {
                 this.$refs.shortUrl.disabled = false
