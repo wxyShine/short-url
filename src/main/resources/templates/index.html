@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short-Url</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/axios@0.19.2/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-clipboard2@0.3.1/dist/vue-clipboard.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header></el-header>
+        <el-main>
+            <div :class="[isPc ? 'body-center body-width-pc' : 'body-center body-width-mb']">
+                <h2>短链接生成服务</h2>
+                <el-input ref="long" v-model="longUrl" size="medium" @keyup.enter.native="enterToDoShort">
+                    <el-button slot="append" icon="el-icon-magic-stick" @click="doShort" :loading="loading"></el-button>
+                </el-input>
+                <el-input ref="shortUrl" @dblclick.native="changeDisableStatus" class="copy-content" v-model="shortUrl"
+                          size="medium">
+                    <el-button slot="append" v-clipboard:copy="shortUrl" v-clipboard:success="onCopy" ref="copy-btn"
+                               icon="el-icon-document-copy"></el-button>
+                </el-input>
+            </div>
+        </el-main>
+    </el-container>
+</div>
+
+<script th:inline="javascript">
+    const backend = [[${baseUrl}]]
+    let app = new Vue({
+        el: "#app",
+        data() {
+            return {
+                isPc: true,
+                loading: false,
+                longUrl: '',
+                shortUrl: ''
+            }
+        },
+        created() {
+            const os = this.getOS()
+            if (os.isPc !== true) {
+                this.isPc = false
+            }
+        },
+        mounted() {
+            this.$refs.long.focus()
+        },
+        methods: {
+            enterToDoShort(ev) {
+                ev.keyCode === 13 && this.doShort()
+            },
+            doShort() {
+                let regx = "^((https|http|ftp|rtsp|mms)?://)"  //https、http、ftp、rtsp、mms
+                    + "?(([0-9a-z_!~*‘().&=+$%-]+: )?[0-9a-z_!~*‘().&=+$%-]+@)?" //ftp的user@
+                    + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 例如：199.194.52.184
+                    + "|" // 允许IP和DOMAIN(域名)
+                    + "([0-9a-z_!~*‘()-]+\\.)*" // 域名- www.
+                    + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
+                    + "[a-z]{2,6})" // first level domain- .com or .museum
+                    + "(:[0-9]{1,5})?" // 端口号最大为65535,5位数
+                    + "((/?)|" // a slash isn‘t required if there is no file name
+                    + "(/[0-9a-z_!~*‘().;?:@&=+$,%#-]+)+/?)$";
+                let re = new RegExp(regx)
+                if (re.exec(this.longUrl) === null) {
+                    this.$message.warning('请输入正确格式的长链接')
+                    return
+                }
+
+                this.loading = true
+                axios.get(backend + '/short?longUrl=' + this.longUrl, {
+                    header: {
+                        "Content-Type": "application/form-data; charset=utf-8"
+                    }
+                })
+                    .then(res => {
+                        if (res.data.result === true && res.data.data !== "") {
+                            this.shortUrl = res.data.data;
+                            this.$copyText(this.data)
+                            this.$refs.shortUrl.disabled = true
+                            this.$message.success("短链接已复制到剪贴板");
+                        } else {
+                            this.$message.error("短链接获取失败：" + res.data.Message);
+                        }
+                    })
+                    .catch(() => {
+                        this.$message.error("短链接获取失败");
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
+            goToGayHub() {
+                window.open(repo)
+            },
+            getOS() {
+                let ua = navigator.userAgent,
+                    isWindowsPhone = /(?:Windows Phone)/.test(ua),
+                    isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+                    isAndroid = /(?:Android)/.test(ua),
+                    isFireFox = /(?:Firefox)/.test(ua),
+                    isChrome = /(?:Chrome|CriOS)/.test(ua),
+                    isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+                    isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+                    isPc = !isPhone && !isAndroid && !isSymbian;
+
+                return {
+                    isTablet: isTablet,
+                    isPhone: isPhone,
+                    isAndroid: isAndroid,
+                    isPc: isPc
+                };
+            },
+            getBodyClass() {
+                return this.isPc ? 'body-center body-width-pc' : 'body-center'
+            },
+            onCopy() {
+                this.$message.success("Copied!");
+            },
+            changeDisableStatus(event) {
+                this.$refs.shortUrl.disabled = false
+            }
+        },
+    })
+</script>
+
+<style>
+    .body-center {
+        width: 40%;
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .body-width-pc {
+        width: 40%;
+    }
+
+    .body-width-mb {
+        width: 90%;
+    }
+
+    .el-input {
+        margin-top: 20px;
+    }
+</style>
+</body>
+
+</html>
