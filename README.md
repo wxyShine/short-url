@@ -18,5 +18,5 @@ java -jar -Xms128m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M  short-url-1.
 > 使用docker方式部署  
 
 ```shell
-docker run -d -p 8090:8090 --name short-url --restart=always wxyshine/short-url:v1.0.0
+docker run -d -p 8090:8090 --name short-url --restart=always wxyshine/short-url:latest
 ```
