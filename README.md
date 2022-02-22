@@ -1,6 +1,6 @@
 # 短链接生成服务
 
-## 基于spring boot + H2 数据库 + Vue
+## 基于spring boot + H2 数据库 + 布隆过滤器	+ Vue
 
 ## <a href="http://42.193.127.130:8090/" target="_blank">Demo</a>
 

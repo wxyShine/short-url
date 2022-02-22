@@ -4,7 +4,9 @@ import com.wxy97.entity.ShortUrl;
 import com.wxy97.service.ShortUrlService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +68,7 @@ public class ShortUrlController {
             }
         }
         HashMap<String, Object> res = new HashMap<>();
-        res.put("msg", "不存在的短链接" + getUrlStart(request) +"/"+ shorts);
+        res.put("msg", "不存在的短链接" + getUrlStart(request) + "/" + shorts);
         res.put("data", null);
         res.put("result", false);
         res.put("createBy", getUrlStart(request));
@@ -79,9 +81,6 @@ public class ShortUrlController {
         url.append(request.getScheme());
         url.append("://").append(request.getServerName());
         url.append(":").append(request.getServerPort());
-/*        System.out.println(url);
-        url.append(request.getServletPath());
-        System.out.println(url);*/
         return url.toString();
     }
 

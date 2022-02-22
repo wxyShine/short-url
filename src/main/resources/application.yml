@@ -5,7 +5,7 @@ spring:
     name: short-url
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/short-db
+    url: jdbc:h2:file:~/.short-url/short-db
     username: admin
     password: 123456
   jpa:

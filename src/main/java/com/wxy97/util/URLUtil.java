@@ -1,12 +1,15 @@
 package com.wxy97.util;
 
+import com.wxy97.filter.ShortUrlBloomFilter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Random;
 
+@Slf4j
 public class URLUtil {
     //生成短链接的八个字符
     public static String getShortURL() {
         Random random = new Random();
-
         // 要使用生成 URL 的字符
         char[] chars = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
                 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
@@ -20,8 +23,15 @@ public class URLUtil {
         for (int i = 0; i < 8; ++i) {
             key.append(chars[random.nextInt(ln)]);
         }
-
-        return key.toString();
+        String s = key.toString();
+        //从 BloomFilter 查看是否存在
+        boolean mightContain = ShortUrlBloomFilter.mightContain(s);
+        if (mightContain) {
+            String newS = getShortURL();
+            s = newS;
+            log.debug("{}已存在shorts,重新生成{}", s, newS);
+        }
+        return s;
     }
 }
 

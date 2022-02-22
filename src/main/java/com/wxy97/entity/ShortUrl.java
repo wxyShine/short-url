@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "short_url")
+@Table(name = "short_url",indexes = {@Index(name = "idx_shorts",columnList = "shorts",unique = true)})
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class ShortUrl {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String shorts;
