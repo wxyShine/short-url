@@ -2,7 +2,7 @@
 
 ## 基于spring boot + H2 数据库 + Vue
 
-## Demo http://42.193.127.130:8090/
+## <a href="http://42.193.127.130:8090/" target="_blank">Demo</a>
 
 ### 部署方式一
 
