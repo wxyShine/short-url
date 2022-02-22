@@ -9,7 +9,8 @@
 > <a href="https://github.com/wxyShine/short-url/releases" target="_blank">下载jar包</a> 直接启动 默认端口 8090
 
 ```shell
-java -jar -Xms128m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M  short-url-1.0.0.jar
+# 自行替换版本号
+java -jar -Xms128m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M  short-url-版本号.jar
 
 ```
 
