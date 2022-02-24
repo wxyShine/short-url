@@ -4,6 +4,7 @@ import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.wxy97.service.ShortUrlService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,9 @@ import java.util.List;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ShortUrlBloomFilter implements InitializingBean {
+
     private static BloomFilter<String> bloomFilter = BloomFilter.create(
             Funnels.stringFunnel(Charset.defaultCharset()), 1000000);
 

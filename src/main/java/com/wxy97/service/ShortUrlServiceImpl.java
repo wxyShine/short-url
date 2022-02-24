@@ -4,7 +4,7 @@ import com.wxy97.entity.ShortUrl;
 import com.wxy97.filter.ShortUrlBloomFilter;
 import com.wxy97.repository.ShortUrlRepository;
 import com.wxy97.util.URLUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ShortUrlServiceImpl implements ShortUrlService {
 
     private final ShortUrlRepository shortUrlRepository;
@@ -33,7 +33,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             ShortUrl build = ShortUrl.builder()
                     .shorts(shortURL)
                     .longUrl(longUrl)
-                    .shortUrl(baseUrl + "/" + shortURL).build();
+                    .shortUrl(baseUrl + "/s/" + shortURL).build();
             save = shortUrlRepository.save(build);
         } catch (Exception e) {
             e.printStackTrace();

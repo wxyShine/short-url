@@ -15,7 +15,6 @@ spring:
     properties:
       hibernate:
         show_sql: true
-#        use_sql_comments: true
         format_sql: true
     open-in-view: false
   h2:
@@ -23,5 +22,5 @@ spring:
       enabled: false
       path: /h2
       settings:
-        trace: true
-        web-allow-others: true
+        trace: false
+        web-allow-others: false

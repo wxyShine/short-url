@@ -3,6 +3,7 @@ package com.wxy97.util;
 import com.wxy97.filter.ShortUrlBloomFilter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 
 @Slf4j
@@ -32,6 +33,20 @@ public class URLUtil {
             log.debug("{}已存在shorts,重新生成{}", s, newS);
         }
         return s;
+    }
+
+    //获取请求的协议域名，端口号生成连接的前半部分
+    public static String getUrlStart(HttpServletRequest request) {
+        StringBuilder url = new StringBuilder();
+        url.append(request.getScheme());
+        url.append("://").append(request.getServerName());
+        url.append(":").append(request.getServerPort());
+        return url.toString();
+    }
+
+    public static Boolean isUrl(String url) {
+        String reg = "http(s*)://[^\\s]*";
+        return url.matches(reg);
     }
 }
 

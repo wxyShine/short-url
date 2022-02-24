@@ -20,7 +20,8 @@
         <el-main>
             <div :class="[isPc ? 'body-center body-width-pc' : 'body-center body-width-mb']">
                 <h2>短链接生成服务</h2>
-                <el-input ref="long" placeholder="请输入要转换的链接地址" v-model="longUrl" size="medium" @keyup.enter.native="enterToDoShort">
+                <el-input ref="long" placeholder="请输入要转换的链接地址" v-model="longUrl" size="medium"
+                          @keyup.enter.native="enterToDoShort">
                     <el-button slot="append" icon="el-icon-magic-stick" @click="doShort" :loading="loading"></el-button>
                 </el-input>
                 <el-input ref="shortUrl" @dblclick.native="changeDisableStatus" class="copy-content" v-model="shortUrl"
@@ -67,11 +68,7 @@
                 }
 
                 this.loading = true
-                axios.get(backend + '/short?longUrl=' + this.longUrl, {
-                    header: {
-                        "Content-Type": "application/form-data; charset=utf-8"
-                    }
-                })
+                axios.post(backend, {"longUrl": this.longUrl})
                     .then(res => {
                         if (res.data.result === true && res.data.data !== "") {
                             this.shortUrl = res.data.data;

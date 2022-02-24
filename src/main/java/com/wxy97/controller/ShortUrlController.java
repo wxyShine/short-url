@@ -1,12 +1,12 @@
 package com.wxy97.controller;
 
 import com.wxy97.entity.ShortUrl;
+import com.wxy97.param.ShortUrlParam;
 import com.wxy97.service.ShortUrlService;
-import lombok.AllArgsConstructor;
+import com.wxy97.util.URLUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,24 +16,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ShortUrlController {
 
     private final ShortUrlService shortUrlServiceImpl;
 
     @GetMapping("/")
     public ModelAndView index(ModelAndView modelAndView, HttpServletRequest request) {
-        modelAndView.addObject("baseUrl", getUrlStart(request));
+        modelAndView.addObject("baseUrl", URLUtil.getUrlStart(request));
         modelAndView.setViewName("index");
         return modelAndView;
     }
 
-    @GetMapping("/short")
+    /**
+     * 生成短链接
+     *
+     * @param param   需要转换的链接
+     * @param request
+     * @return
+     */
+    @PostMapping("/")
     @ResponseBody
-    public Map shortUrl(String longUrl, HttpServletRequest request) {
+    public Map shortUrl(@RequestBody ShortUrlParam param, HttpServletRequest request) {
         HashMap<String, Object> res = new HashMap<>();
-        String urlStart = getUrlStart(request);
-
+        String urlStart = URLUtil.getUrlStart(request);
+        String longUrl = param.getLongUrl();
         if (longUrl == null || longUrl.equals("")) {
             res.put("msg", "生成短链接失败,缺少参数longUrl");
             res.put("data", null);
@@ -41,7 +48,7 @@ public class ShortUrlController {
             res.put("createBy", urlStart);
             return res;
         }
-        if (!isUrl(longUrl)) {
+        if (!URLUtil.isUrl(longUrl)) {
             res.put("msg", "生成短链接失败,参数longUrl不合法");
             res.put("data", null);
             res.put("result", false);
@@ -56,7 +63,15 @@ public class ShortUrlController {
         return res;
     }
 
-    @GetMapping("/{shorts}")
+    /**
+     * 访问短链接
+     *
+     * @param response
+     * @param request
+     * @param shorts
+     * @return
+     */
+    @GetMapping("/s/{shorts}")
     @ResponseBody
     public Map redirectUrl(HttpServletResponse response, HttpServletRequest request, @PathVariable String shorts) {
         ShortUrl shortUrl = shortUrlServiceImpl.genLongUrl(shorts);
@@ -68,24 +83,12 @@ public class ShortUrlController {
             }
         }
         HashMap<String, Object> res = new HashMap<>();
-        res.put("msg", "不存在的短链接" + getUrlStart(request) + "/" + shorts);
+        res.put("msg", "不存在的短链接" + URLUtil.getUrlStart(request) + "/" + shorts);
         res.put("data", null);
         res.put("result", false);
-        res.put("createBy", getUrlStart(request));
+        res.put("createBy", URLUtil.getUrlStart(request));
         return res;
     }
 
-    //获取请求的协议域名，端口号生成连接的前半部分
-    public String getUrlStart(HttpServletRequest request) {
-        StringBuilder url = new StringBuilder();
-        url.append(request.getScheme());
-        url.append("://").append(request.getServerName());
-        url.append(":").append(request.getServerPort());
-        return url.toString();
-    }
 
-    public Boolean isUrl(String url) {
-        String reg = "http(s*)://[^\\s]*";
-        return url.matches(reg);
-    }
 }
