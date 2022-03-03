@@ -1,11 +1,15 @@
 package com.wxy97.controller;
 
 import com.wxy97.entity.ShortUrl;
+import com.wxy97.exception.ServiceException;
 import com.wxy97.param.ShortUrlParam;
 import com.wxy97.service.ShortUrlService;
 import com.wxy97.util.URLUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,30 +41,8 @@ public class ShortUrlController {
      */
     @PostMapping("/")
     @ResponseBody
-    public Map shortUrl(@RequestBody ShortUrlParam param, HttpServletRequest request) {
-        HashMap<String, Object> res = new HashMap<>();
-        String urlStart = URLUtil.getUrlStart(request);
-        String longUrl = param.getLongUrl();
-        if (longUrl == null || longUrl.equals("")) {
-            res.put("msg", "生成短链接失败,缺少参数longUrl");
-            res.put("data", null);
-            res.put("result", false);
-            res.put("createBy", urlStart);
-            return res;
-        }
-        if (!URLUtil.isUrl(longUrl)) {
-            res.put("msg", "生成短链接失败,参数longUrl不合法");
-            res.put("data", null);
-            res.put("result", false);
-            res.put("createBy", urlStart);
-            return res;
-        }
-        ShortUrl shortUrl = shortUrlServiceImpl.genShortUrl(longUrl, urlStart);
-        res.put("msg", "生成短链接成功");
-        res.put("data", shortUrl.getShortUrl());
-        res.put("createBy", urlStart);
-        res.put("result", true);
-        return res;
+    public ResponseEntity shortUrl(@Validated @RequestBody ShortUrlParam param, HttpServletRequest request) {
+        return new ResponseEntity(shortUrlServiceImpl.genShortUrl(param.getLongUrl(), URLUtil.getUrlStart(request)), HttpStatus.OK);
     }
 
     /**
@@ -73,7 +55,7 @@ public class ShortUrlController {
      */
     @GetMapping("/s/{shorts}")
     @ResponseBody
-    public Map redirectUrl(HttpServletResponse response, HttpServletRequest request, @PathVariable String shorts) {
+    public ResponseEntity redirectUrl(HttpServletResponse response, HttpServletRequest request, @PathVariable String shorts) {
         ShortUrl shortUrl = shortUrlServiceImpl.genLongUrl(shorts);
         if (shortUrl != null) {
             try {
@@ -82,12 +64,7 @@ public class ShortUrlController {
                 e.printStackTrace();
             }
         }
-        HashMap<String, Object> res = new HashMap<>();
-        res.put("msg", "不存在的短链接" + URLUtil.getUrlStart(request) + "/" + shorts);
-        res.put("data", null);
-        res.put("result", false);
-        res.put("createBy", URLUtil.getUrlStart(request));
-        return res;
+        throw new ServiceException(404, URLUtil.getUrlStart(request), "不存在的短链接");
     }
 
 

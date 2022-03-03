@@ -15,11 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 1L;
-
     /**
      * 错误码
      */
-    private Integer code;
+    private Integer status;
 
     /**
      * 错误提示

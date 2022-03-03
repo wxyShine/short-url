@@ -1,5 +1,5 @@
 # 定义父镜像
-FROM  anapsix/alpine-java:8_server-jre_unlimited
+FROM  adoptopenjdk/openjdk8-openj9
 # 维护者信息
 MAINTAINER wxy
 # 暴漏端口
