@@ -23,6 +23,7 @@ public class ShortUrl {
 
     private String shorts;
 
+    @Lob @Basic(fetch = FetchType.LAZY) @Column(columnDefinition = "text")
     private String longUrl;
 
     private String shortUrl;
