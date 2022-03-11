@@ -7,4 +7,4 @@ EXPOSE 8090
 # 将jar包添加到容器
 ADD ./target/short-url.jar /root/short-url.jar
 # 定义容器启动执行的命令
-CMD java -jar /root/short-url.jar
+ENTRYPOINT ["java",  "-jar", "/root/short-url.jar"]
