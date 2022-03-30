@@ -57,7 +57,7 @@ java -jar -Xms128m -Xmx512m -XX:PermSize=128M -XX:MaxPermSize=256M  short-url-�
 
 ```shell
 docker run -d -p 8090:8090 -v ~/.short-url:/root/.short-url --name short-url --restart=always wxyshine/short-url:latest
-```  
+```     
 
-> 如nginx 配置ssl 生成的短链接不带https
-> 在nginx 配置location处加上`proxy_set_header X-Forwarded-Scheme  $scheme;` 
+
+> 如nginx 配置ssl 生成的短链接不带https  在nginx 配置location处加上 `proxy_set_header X-Forwarded-Scheme  $scheme;`
