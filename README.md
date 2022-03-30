@@ -2,7 +2,7 @@
 
 ## 基于spring boot + H2 数据库实现的短链接生成服务
 
-## <a href="http://42.193.127.130:8090/" target="_blank">Demo</a>
+## 演示  <a href="http://a-url.tk" target="_blank">https://a-url.tk </a>
 
 ### 部署方式一
 

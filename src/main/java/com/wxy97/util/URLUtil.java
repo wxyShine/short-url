@@ -6,9 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 
+/**
+ * @author wxy
+ */
 @Slf4j
 public class URLUtil {
-    //生成短链接的八个字符
+    /**
+     * 生成短链接的6个字符
+     *
+     * @return
+     */
     public static String getShortURL() {
         Random random = new Random();
         // 要使用生成 URL 的字符
@@ -21,7 +28,7 @@ public class URLUtil {
         };
         int ln = chars.length;
         StringBuilder key = new StringBuilder();
-        for (int i = 0; i < 8; ++i) {
+        for (int i = 0; i < 6; ++i) {
             key.append(chars[random.nextInt(ln)]);
         }
         String s = key.toString();
@@ -35,12 +42,21 @@ public class URLUtil {
         return s;
     }
 
-    //获取请求的协议域名，端口号生成连接的前半部分
+    /**
+     * 获取请求的协议域名，端口号生成连接的前半部分
+     *
+     * @param request
+     * @return
+     */
     public static String getUrlStart(HttpServletRequest request) {
         StringBuilder url = new StringBuilder();
         url.append(request.getScheme());
         url.append("://").append(request.getServerName());
-        url.append(":").append(request.getServerPort());
+        if (request.getServerPort() == 80 || request.getServerPort() == 443) {
+
+        } else {
+            url.append(":").append(request.getServerPort());
+        }
         return url.toString();
     }
 
