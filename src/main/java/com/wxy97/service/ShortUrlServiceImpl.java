@@ -7,6 +7,8 @@ import com.wxy97.util.URLUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,19 +29,13 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public ShortUrl genShortUrl(String longUrl, String baseUrl) {
-        ShortUrl save = null;
-        try {
-            String shortURL = URLUtil.getShortURL();
-            ShortUrl build = ShortUrl.builder()
-                    .shorts(shortURL)
-                    .longUrl(longUrl)
-                    .shortUrl(baseUrl + "/s/" + shortURL).build();
-            save = shortUrlRepository.save(build);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            ShortUrlBloomFilter.put(save.getShorts());
-        }
+        String shortURL = URLUtil.getShortURL();
+        ShortUrl build = ShortUrl.builder()
+                .shorts(shortURL)
+                .longUrl(longUrl)
+                .shortUrl(baseUrl + "/s/" + shortURL).build();
+        ShortUrl save = shortUrlRepository.save(build);
+        ShortUrlBloomFilter.put(save.getShorts());
         return save;
     }
 

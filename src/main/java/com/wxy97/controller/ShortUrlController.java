@@ -1,7 +1,6 @@
 package com.wxy97.controller;
 
 import com.wxy97.entity.ShortUrl;
-import com.wxy97.exception.ServiceException;
 import com.wxy97.param.ShortUrlParam;
 import com.wxy97.service.ShortUrlService;
 import com.wxy97.util.URLUtil;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,10 +25,8 @@ public class ShortUrlController {
     private final ShortUrlService shortUrlServiceImpl;
 
     @GetMapping("/")
-    public ModelAndView index(ModelAndView modelAndView, HttpServletRequest request) {
-        modelAndView.addObject("baseUrl", URLUtil.getUrlStart(request));
-        modelAndView.setViewName("index");
-        return modelAndView;
+    public String index() {
+        return "index";
     }
 
     /**
@@ -64,8 +60,10 @@ public class ShortUrlController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return null;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("不存在的短链接");
         }
-        throw new ServiceException(404, URLUtil.getUrlStart(request), "不存在的短链接");
     }
 
 

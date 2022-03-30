@@ -50,11 +50,14 @@ public class URLUtil {
      */
     public static String getUrlStart(HttpServletRequest request) {
         StringBuilder url = new StringBuilder();
-        url.append(request.getScheme());
-        url.append("://").append(request.getServerName());
-        if (request.getServerPort() == 80 || request.getServerPort() == 443) {
-
+        String header = request.getHeader("X-Forwarded-Scheme");
+        if (header != null) {
+            url.append(header);
         } else {
+            url.append(request.getScheme());
+        }
+        url.append("://").append(request.getServerName());
+        if (request.getServerPort() != 80 && request.getServerPort() != 443) {
             url.append(":").append(request.getServerPort());
         }
         return url.toString();

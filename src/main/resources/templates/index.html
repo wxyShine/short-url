@@ -69,7 +69,7 @@
 </div>
 
 <script th:inline="javascript">
-    const backend = [[${baseUrl}]]
+    const backend = window.location.href
     let app = new Vue({
         el: "#app",
         data() {
