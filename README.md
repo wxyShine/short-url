@@ -1,35 +1,10 @@
 # 短链接生成服务
+> 基于spring boot + H2 数据库实现的短链接生成服务
 
-## 基于spring boot + H2 数据库实现的短链接生成服务
+## 演示  <a href="http://a-url.tk" target="_blank">https://a-url.tk </a>  
+> 演示站为公共服务(不能保证永久链接)，如需使用请自行部署。
 
-## 演示  <a href="http://a-url.tk" target="_blank">https://a-url.tk </a>
-
-## 提供接口
-
-### 请求说明
-
-> 请求方式：POST
-> 请求URL ：/
-
-### 请求参数
-
-| 字段     | 字段类型 | 字段说明 |
-| -------- | -------- | -------- |
-| longUrl    | String      | 需要转换的长链接   | 
-
-### 返回结果正确 HttpStatus 200
-
-```json
-{
-  "id": 1,
-  "shorts": "bjCPD2",
-  "longUrl": "https://github.com/wxyShine/short-url",
-  "shortUrl": "https://a-url.tk/s/bjCPD2",
-  "createTime": "2022-03-30 08:42:40"
-}
-```  
-
-### 参数校验失败 HttpStatus 400
+## 提供API  <a href="https://github.com/wxyShine/short-url/wiki/Short-Url-Api" target="_blank">wiki</a>  
 
 
 ## 部署方式一
@@ -51,4 +26,5 @@ docker run -d -p 8090:8090 -v ~/.short-url:/root/.short-url --name short-url --r
 ```     
 
 
-> 如nginx 配置ssl 生成的短链接不带https  在nginx 配置location处加上 `proxy_set_header X-Forwarded-Scheme  $scheme;`
+> 如nginx 配置ssl 生成的短链接不带https  
+> 在nginx 配置location处加上 `proxy_set_header X-Forwarded-Scheme  $scheme;`

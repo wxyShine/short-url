@@ -1,5 +1,6 @@
 package com.wxy97.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wxy97.entity.ShortUrl;
 import com.wxy97.param.ShortUrlParam;
 import com.wxy97.service.ShortUrlService;
@@ -46,13 +47,12 @@ public class ShortUrlController {
      * 访问短链接
      *
      * @param response
-     * @param request
      * @param shorts
      * @return
      */
     @GetMapping("/s/{shorts}")
     @ResponseBody
-    public ResponseEntity redirectUrl(HttpServletResponse response, HttpServletRequest request, @PathVariable String shorts) {
+    public ResponseEntity redirectUrl(HttpServletResponse response, @PathVariable String shorts) {
         ShortUrl shortUrl = shortUrlServiceImpl.genLongUrl(shorts);
         if (shortUrl != null) {
             try {
