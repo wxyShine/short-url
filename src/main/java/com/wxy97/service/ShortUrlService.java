@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ShortUrlService {
 
+
     ShortUrl genShortUrl(String longUrl, String baseUrl);
 
     ShortUrl genLongUrl(String shorts);

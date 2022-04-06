@@ -62,10 +62,5 @@ public class URLUtil {
         }
         return url.toString();
     }
-
-    public static Boolean isUrl(String url) {
-        String reg = "http(s*)://[^\\s]*";
-        return url.matches(reg);
-    }
 }
 

@@ -3,7 +3,6 @@ package com.wxy97.filter;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.wxy97.service.ShortUrlService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;

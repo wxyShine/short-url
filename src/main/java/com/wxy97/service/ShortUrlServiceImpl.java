@@ -39,19 +39,31 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         return save;
     }
 
+    /**
+     * 转换为原链接
+     *
+     * @param shorts
+     * @return
+     */
     @Override
     public ShortUrl genLongUrl(String shorts) {
-        ShortUrl build = ShortUrl.builder().shorts(shorts).build();
-        Example<ShortUrl> example = Example.of(build);
-        Optional<ShortUrl> one = shortUrlRepository.findOne(example);
-        if (one.isPresent()) {
-            build = one.get();
-            return build;
-        } else {
-            return null;
+        if (ShortUrlBloomFilter.mightContain(shorts)) {
+            ShortUrl build = ShortUrl.builder().shorts(shorts).build();
+            Example<ShortUrl> example = Example.of(build);
+            Optional<ShortUrl> one = shortUrlRepository.findOne(example);
+            if (one.isPresent()) {
+                build = one.get();
+                return build;
+            }
         }
+        return null;
     }
 
+    /**
+     * 获取全部数据
+     *
+     * @return
+     */
     @Override
     public List<String> getAllShort() {
         return shortUrlRepository.findAll().stream().map(ShortUrl::getShorts).collect(Collectors.toList());
