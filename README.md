@@ -1,8 +1,10 @@
 # 短链接生成服务
 > 基于spring boot + H2 数据库实现的短链接生成服务(jdk1.8)
 
-## 演示  <a href="http://a-url.tk" target="_blank">https://a-url.tk </a>  
+## ~~~演示  <a href="http://a-url.tk" target="_blank">https://a-url.tk </a>~~~
 > 演示站为公共服务(不能保证永久链接)，如需使用请自行部署。
+
+![demo](./images/Snipaste_2022-09-08_08-51-03.png)
 
 ## 提供API  <a href="https://github.com/wxyShine/short-url/wiki/Short-Url-Api" target="_blank">wiki</a>  
 

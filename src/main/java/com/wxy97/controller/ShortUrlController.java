@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author wxy
@@ -53,7 +54,7 @@ public class ShortUrlController {
     @ResponseBody
     public ResponseEntity redirectUrl(HttpServletResponse response, @PathVariable String shorts) {
         ShortUrl shortUrl = shortUrlServiceImpl.genLongUrl(shorts);
-        if (shortUrl != null) {
+        if (Objects.nonNull(shortUrl)) {
             try {
                 response.sendRedirect(shortUrl.getLongUrl());
             } catch (IOException e) {
