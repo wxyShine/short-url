@@ -18,7 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-
+**/rebel.xml
+.fastRequest
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
